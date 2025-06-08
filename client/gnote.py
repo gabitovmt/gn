@@ -21,18 +21,18 @@ class MainWindow(Tk):
 
         self.geometry("640x480")
 
-        top_panel = Frame(self)
-        top_panel.pack(side='top', fill='x')
+        self.__top_panel = Frame(self)
+        self.__top_panel.pack(side='top', fill='x')
 
-        open_btn = Button(top_panel, text='open', command=self.__on_open_btn)
-        open_btn.pack(side='left')
-        save_btn = Button(top_panel, text='save', command=self.__on_save_btn)
-        save_btn.pack(side='left')
+        self.__open_btn = Button(self.__top_panel, text='open', command=self.__on_open_btn)
+        self.__open_btn.pack(side='left')
+        self.__save_btn = Button(self.__top_panel, text='save', command=self.__on_save_btn)
+        self.__save_btn.pack(side='left')
 
-        key_entry = Entry(top_panel, textvariable=self.__key_var)
-        key_entry.pack(side='left', padx=8, pady=8)
+        self.__key_entry = Entry(self.__top_panel, textvariable=self.__key_var)
+        self.__key_entry.pack(side='left', padx=8, pady=8)
 
-        text = Text(
+        self.__editor = Text(
             self,
             width=60,
             height=20,
@@ -46,15 +46,24 @@ class MainWindow(Tk):
             spacing2=2,
             spacing3=4
         )
-        text.pack(fill='both', expand=True)
+        self.__editor.pack(fill='both', expand=True)
 
         self.mainloop()
 
     def __on_open_btn(self):
-        pass
+        self.__editor_text = open_text()
 
     def __on_save_btn(self):
-        pass
+        save_text(self.__editor_text)
+
+    @property
+    def __editor_text(self):
+        return self.__editor.get('1.0', 'end').rstrip()
+
+    @__editor_text.setter
+    def __editor_text(self, text):
+        self.__editor.delete('1.0', 'end')
+        self.__editor.insert('1.0', text)
 
 
 if __name__ == '__main__':
