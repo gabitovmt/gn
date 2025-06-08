@@ -30,8 +30,8 @@ class MainWindow(Tk):
         self.__save_btn = Button(self.__top_panel, text='save', command=self.__on_save_btn, state='disabled')
         self.__save_btn.pack(side='left')
 
-        self.__key_entry = Entry(self.__top_panel, textvariable=self.__key_var)
-        self.__key_entry.pack(side='left', padx=8, pady=8)
+        # self.__key_entry = Entry(self.__top_panel, textvariable=self.__key_var)
+        # self.__key_entry.pack(side='left', padx=8, pady=8)
 
         self.__editor = Text(
             self,
