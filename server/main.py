@@ -35,14 +35,14 @@ def run(file: Annotated[bytes, File()], response: Response):
         raise HTTPException(status_code=400, detail='no request body')
 
     try:
-        data = decrypt(file)
+        data = crypto_service.decrypt(file)
     except BaseException:
         raise HTTPException(status_code=400, detail='no valid data')
 
     print(data)
 
     response.status_code = 202
-    return encrypt(data)
+    return crypto_service.encrypt(data)
 
 
 class NoteRepository:
@@ -110,17 +110,20 @@ class NoteRepository:
         }
 
 
-def decrypt(data):
-    return json.loads(cipher_suite.decrypt(data).decode('utf-8'))
+class CryptoService:
 
+    def __init__(self, key_filename: str):
+        with open(key_filename) as f:
+            key = f.read().rstrip()
+            self.__cipher_suite = Fernet(key)
 
-def encrypt(data):
-    return cipher_suite.encrypt(json.dumps(data).encode('utf-8'))
+    def decrypt(self, data):
+        return json.loads(self.__cipher_suite.decrypt(data).decode('utf-8'))
+
+    def encrypt(self, data):
+        return self.__cipher_suite.encrypt(json.dumps(data).encode('utf-8'))
 
 
 connect = sqlite3.connect('gnote.db')
 note_repository = NoteRepository(connect)
-
-with open('key.txt') as f:
-    key = f.read().rstrip()
-    cipher_suite = Fernet(key)
+crypto_service = CryptoService('key.txt')
