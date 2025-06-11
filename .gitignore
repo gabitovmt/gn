@@ -193,8 +193,7 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
-# Temp Files
+# User Files
 gnote.bin
-
-# Secret
+gnote.db
 key.txt
