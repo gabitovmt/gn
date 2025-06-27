@@ -197,3 +197,4 @@ cython_debug/
 gnote.bin
 gnote.db
 key.txt
+application.properties
